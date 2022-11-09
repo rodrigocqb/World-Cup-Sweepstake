@@ -14,8 +14,12 @@ async function getMatch(team1: string, team2: string) {
   );
 }
 
+async function getMatchById(id: number) {
+  return connection.query(`SELECT * FROM matches WHERE id = $1`, [id]);
+}
+
 async function getMatches() {
   return connection.query(`SELECT * FROM matches;`);
 }
 
-export { insertMatch, getMatch, getMatches };
+export { insertMatch, getMatch, getMatchById, getMatches };
