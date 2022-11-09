@@ -19,4 +19,14 @@ async function createMatch(req: Request, res: Response) {
   }
 }
 
-export { createMatch };
+async function getMatches(req: Request, res: Response) {
+  try {
+    const matches: Match[] = (await matchesRepository.getMatches()).rows;
+    return res.status(200).send(matches);
+  } catch (error) {
+    console.log(error.message);
+    return res.sendStatus(500);
+  }
+}
+
+export { createMatch, getMatches };
