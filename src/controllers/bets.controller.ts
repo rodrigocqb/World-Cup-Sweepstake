@@ -18,7 +18,12 @@ async function createBet(req: Request, res: Response) {
     if (!match) {
       return res.sendStatus(404);
     }
-    await betsRepository.insertBet(team1_score, team2_score);
+    await betsRepository.insertBet(
+      user.id,
+      Number(matchId),
+      team1_score,
+      team2_score
+    );
     return res.sendStatus(201);
   } catch (error) {
     console.log(error.message);

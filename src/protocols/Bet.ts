@@ -3,6 +3,6 @@ export type Bet = {
   user_id?: number;
   team1_score: number;
   team2_score: number;
-  status?: boolean;
+  status?: boolean | null;
   cancelled?: boolean;
 };
