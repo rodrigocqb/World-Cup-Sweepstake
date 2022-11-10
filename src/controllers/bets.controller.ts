@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Bet, BetEntity } from "../protocols/Bet.js";
 import * as matchesRepository from "../repositories/matches.repository.js";
 import * as betsRepository from "../repositories/bets.repository.js";
-import { UserEntity } from "../protocols/User.js";
+import { RankedUser, UserEntity } from "../protocols/User.js";
 import { MatchEntity } from "../protocols/Match.js";
 
 async function createBet(req: Request, res: Response) {
@@ -74,7 +74,7 @@ async function cancelBet(req: Request, res: Response) {
 
 async function getRanking(req: Request, res: Response) {
   try {
-    const ranking = (await betsRepository.getUsersRanking()).rows;
+    const ranking: RankedUser[] = (await betsRepository.getUsersRanking()).rows;
     return res.status(200).send(ranking);
   } catch (error) {
     console.log(error.message);

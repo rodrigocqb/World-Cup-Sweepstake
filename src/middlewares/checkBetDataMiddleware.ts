@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { BetEntity } from "../protocols/Bet.js";
 import { UserEntity } from "../protocols/User.js";
 import * as betsRepository from "../repositories/bets.repository.js";
 
@@ -6,7 +7,7 @@ async function checkBetData(req: Request, res: Response, next: NextFunction) {
   const { betId } = req.params;
   const user = res.locals.user as UserEntity;
   try {
-    const bet = (await betsRepository.getBet(Number(betId))).rows[0];
+    const bet: BetEntity = (await betsRepository.getBet(Number(betId))).rows[0];
     if (!bet) {
       return res.sendStatus(404);
     }

@@ -1,6 +1,7 @@
 import { QueryResult } from "pg";
 import connection from "../database/database.js";
 import { BetEntity } from "../protocols/Bet.js";
+import { RankedUser } from "../protocols/User.js";
 
 async function insertBet(
   user_id: number,
@@ -47,7 +48,7 @@ async function deleteBet(id: number): Promise<QueryResult<BetEntity>> {
   return connection.query(`DELETE FROM bets WHERE id = $1;`, [id]);
 }
 
-async function getUsersRanking() {
+async function getUsersRanking(): Promise<QueryResult<RankedUser>> {
   return connection.query(`SELECT users.id, users.name, 
   COUNT(bets.id) AS correct_bets
   FROM users LEFT JOIN bets ON users.id = bets.user_id
