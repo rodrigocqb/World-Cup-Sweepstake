@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import { Match } from "../protocols/Match.js";
+import { Match, MatchEntity } from "../protocols/Match.js";
 import * as matchesRepository from "../repositories/matches.repository.js";
 
 async function createMatch(req: Request, res: Response) {
   const { team1, team2 } = req.body as Match;
   try {
-    const match: Match | undefined = (
-      await matchesRepository.getMatch(team1, team2)
-    ).rows[0];
+    const match: MatchEntity = (await matchesRepository.getMatch(team1, team2))
+      .rows[0];
     if (match) {
       return res.sendStatus(409);
     }
@@ -21,7 +20,7 @@ async function createMatch(req: Request, res: Response) {
 
 async function getMatches(req: Request, res: Response) {
   try {
-    const matches: Match[] = (await matchesRepository.getMatches()).rows;
+    const matches: MatchEntity[] = (await matchesRepository.getMatches()).rows;
     return res.status(200).send(matches);
   } catch (error) {
     console.log(error.message);

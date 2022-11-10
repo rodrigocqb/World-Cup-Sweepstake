@@ -2,18 +2,17 @@ import { Request, Response } from "express";
 import { Bet } from "../protocols/Bet.js";
 import * as matchesRepository from "../repositories/matches.repository.js";
 import * as betsRepository from "../repositories/bets.repository.js";
-import { User } from "../protocols/User.js";
+import { UserEntity } from "../protocols/User.js";
+import { MatchEntity } from "../protocols/Match.js";
 
 async function createBet(req: Request, res: Response) {
   const { matchId } = req.params;
   const { team1_score, team2_score } = req.body as Bet;
-  const user: User | undefined = res.locals.user;
-  if (!user) {
-    return res.sendStatus(401);
-  }
+  const user = res.locals.user as UserEntity;
   try {
-    const match = (await matchesRepository.getMatchById(Number(matchId)))
-      .rows[0];
+    const match: MatchEntity = (
+      await matchesRepository.getMatchById(Number(matchId))
+    ).rows[0];
     if (!match) {
       return res.sendStatus(404);
     }
@@ -33,6 +32,8 @@ async function createBet(req: Request, res: Response) {
   }
 }
 
-async function getUserBets(req: Request, res: Response) {}
+async function getUserBets(req: Request, res: Response) {
+  const user = res.locals.user as UserEntity;
+}
 
-export { createBet };
+export { createBet, getUserBets };
