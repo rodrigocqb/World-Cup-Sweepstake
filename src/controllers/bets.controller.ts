@@ -81,6 +81,14 @@ async function cancelBet(req: Request, res: Response) {
   }
 }
 
-async function getRanking(req: Request, res: Response) {}
+async function getRanking(req: Request, res: Response) {
+  try {
+    const ranking = (await betsRepository.getUsersRanking()).rows;
+    return res.status(200).send(ranking);
+  } catch (error) {
+    console.log(error.message);
+    return res.sendStatus(500);
+  }
+}
 
 export { createBet, getUserBets, updateBet, cancelBet, getRanking };

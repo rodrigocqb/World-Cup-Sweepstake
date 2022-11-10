@@ -1,6 +1,8 @@
 import { Router } from "express";
 import {
+  cancelBet,
   createBet,
+  getRanking,
   getUserBets,
   updateBet,
 } from "../controllers/bets.controller.js";
@@ -19,11 +21,13 @@ router.post(
 );
 router.get("/bets/user", checkUserName, getUserBets);
 router.put(
-  "/bets/betId",
+  "/bets/:betId",
   validateSchema(betSchema),
   checkUserName,
   checkBetData,
   updateBet
 );
+router.delete("/bets/:betId", checkUserName, checkBetData, cancelBet);
+router.get("/bets/ranking", getRanking);
 
 export default router;

@@ -4,3 +4,5 @@ export type UserEntity = {
 };
 
 export type User = Omit<UserEntity, "id">;
+
+export type RankedUser = { id: number; name: string; correct_bets: number };
