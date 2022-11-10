@@ -43,4 +43,8 @@ async function upsertBet(
   );
 }
 
-export { insertBet, getUserBetsById, getBet, upsertBet };
+async function deleteBet(id: number): Promise<QueryResult<BetEntity>> {
+  return connection.query(`DELETE FROM bets WHERE id = $1`, [id]);
+}
+
+export { insertBet, getUserBetsById, getBet, upsertBet, deleteBet };
