@@ -14,4 +14,13 @@ async function insertBet(
   );
 }
 
-export { insertBet };
+async function getUserBetsById(
+  user_id: number
+): Promise<QueryResult<BetEntity>> {
+  return connection.query(
+    `SELECT * FROM bets WHERE user_id = $1 AND cancelled = FALSE`,
+    [user_id]
+  );
+}
+
+export { insertBet, getUserBetsById };
