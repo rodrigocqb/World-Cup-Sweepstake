@@ -34,7 +34,7 @@ async function upsertBet(
   team1_score: number,
   team2_score: number
 ): Promise<QueryResult<BetEntity>> {
-  await connection.query(`UPDATE bets SET cancelled = FALSE WHERE id = $1;`, [
+  await connection.query(`UPDATE bets SET cancelled = TRUE WHERE id = $1;`, [
     id,
   ]);
   return connection.query(
