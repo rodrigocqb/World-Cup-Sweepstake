@@ -39,12 +39,12 @@ async function updateMatchAndBetStatus(
     match_id,
   ]);
   await connection.query(
-    `UPDATE bets SET status = TRUE WHERE cancelled = FALSE AND team1_score = $1 AND team2_score = $2`,
-    [team1_score, team2_score]
+    `UPDATE bets SET status = TRUE WHERE (match_id = $1 AND cancelled = FALSE AND team1_score = $2 AND team2_score = $3)`,
+    [match_id, team1_score, team2_score]
   );
   return connection.query(
-    `UPDATE bets SET status = TRUE WHERE cancelled = FALSE AND (team1_score <> $1 OR team2_score <> $2)`,
-    [team1_score, team2_score]
+    `UPDATE bets SET status = FALSE WHERE (match_id = $1 AND cancelled = FALSE AND (team1_score <> $2 OR team2_score <> $3))`,
+    [match_id, team1_score, team2_score]
   );
 }
 
