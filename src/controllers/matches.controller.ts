@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Bet } from "../protocols/Bet.js";
 import { Match, MatchEntity } from "../protocols/Match.js";
 import * as matchesRepository from "../repositories/matches.repository.js";
 
@@ -28,4 +29,20 @@ async function getMatches(req: Request, res: Response) {
   }
 }
 
-export { createMatch, getMatches };
+async function updateMatchResult(req: Request, res: Response) {
+  const { matchId } = req.params;
+  const { team1_score, team2_score } = req.body as Bet;
+  try {
+    await matchesRepository.updateMatchAndBetStatus(
+      Number(matchId),
+      team1_score,
+      team2_score
+    );
+    return res.sendStatus(204);
+  } catch (error) {
+    console.log(error.message);
+    return res.sendStatus(500);
+  }
+}
+
+export { createMatch, getMatches, updateMatchResult };

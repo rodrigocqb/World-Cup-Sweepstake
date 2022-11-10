@@ -30,4 +30,28 @@ async function getMatches(): Promise<QueryResult<MatchEntity>> {
   return connection.query(`SELECT * FROM matches;`);
 }
 
-export { insertMatch, getMatch, getMatchById, getMatches };
+async function updateMatchAndBetStatus(
+  match_id: number,
+  team1_score: number,
+  team2_score: number
+): Promise<QueryResult> {
+  await connection.query(`UPDATE matches SET status = FALSE WHERE id = $1`, [
+    match_id,
+  ]);
+  await connection.query(
+    `UPDATE bets SET status = TRUE WHERE cancelled = FALSE AND team1_score = $1 AND team2_score = $2`,
+    [team1_score, team2_score]
+  );
+  return connection.query(
+    `UPDATE bets SET status = TRUE WHERE cancelled = FALSE AND (team1_score <> $1 OR team2_score <> $2)`,
+    [team1_score, team2_score]
+  );
+}
+
+export {
+  insertMatch,
+  getMatch,
+  getMatchById,
+  getMatches,
+  updateMatchAndBetStatus,
+};

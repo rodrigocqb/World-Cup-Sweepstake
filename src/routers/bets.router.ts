@@ -7,6 +7,7 @@ import {
   updateBet,
 } from "../controllers/bets.controller.js";
 import checkBetData from "../middlewares/checkBetDataMiddleware.js";
+import getMatchData from "../middlewares/getMatchMiddleware.js";
 import checkUserName from "../middlewares/getUserMiddleware.js";
 import validateSchema from "../middlewares/schemaValidationMiddleware.js";
 import betSchema from "../schemas/bet.schema.js";
@@ -17,6 +18,7 @@ router.post(
   "/bets/:matchId",
   validateSchema(betSchema),
   checkUserName,
+  getMatchData,
   createBet
 );
 router.get("/bets/user", checkUserName, getUserBets);

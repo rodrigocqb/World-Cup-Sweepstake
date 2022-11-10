@@ -10,15 +10,6 @@ async function createBet(req: Request, res: Response) {
   const { team1_score, team2_score } = req.body as Bet;
   const user = res.locals.user as UserEntity;
   try {
-    const match: MatchEntity = (
-      await matchesRepository.getMatchById(Number(matchId))
-    ).rows[0];
-    if (!match) {
-      return res.sendStatus(404);
-    }
-    if (match.status === false) {
-      return res.sendStatus(400);
-    }
     await betsRepository.insertBet(
       user.id,
       Number(matchId),
