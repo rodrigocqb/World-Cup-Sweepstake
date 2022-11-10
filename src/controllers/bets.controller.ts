@@ -17,7 +17,7 @@ async function createBet(req: Request, res: Response) {
       return res.sendStatus(404);
     }
     if (match.status === false) {
-      return res.sendStatus(401);
+      return res.sendStatus(400);
     }
     await betsRepository.insertBet(
       user.id,
@@ -44,10 +44,45 @@ async function getUserBets(req: Request, res: Response) {
   }
 }
 
-async function updateBet() {}
+async function updateBet(req: Request, res: Response) {
+  const { betId } = req.params;
+  const { team1_score, team2_score } = req.body as Bet;
+  const user = res.locals.user as UserEntity;
+  try {
+    const bet = (await betsRepository.getBet(Number(betId))).rows[0];
+    if (!bet) {
+      return res.sendStatus(404);
+    }
+    if (bet.cancelled || bet.status === true || bet.status === false) {
+      return res.sendStatus(400);
+    }
+    if (bet.user_id !== user.id) {
+      return res.sendStatus(401);
+    }
+    const match: MatchEntity = (
+      await matchesRepository.getMatchById(bet.match_id)
+    ).rows[0];
+    if (match.status === false) {
+      return res.sendStatus(400);
+    }
+    await betsRepository.upsertBet(
+      Number(betId),
+      user.id,
+      match.id,
+      team1_score,
+      team2_score
+    );
+    return res.sendStatus(204);
+  } catch (error) {
+    console.log(error.message);
+    return res.sendStatus(500);
+  }
+}
 
-async function deleteBet() {}
+async function deleteBet(req: Request, res: Response) {
+  const user = res.locals.user as UserEntity;
+}
 
-async function getRanking() {}
+async function getRanking(req: Request, res: Response) {}
 
-export { createBet, getUserBets };
+export { createBet, getUserBets, updateBet, deleteBet, getRanking };
