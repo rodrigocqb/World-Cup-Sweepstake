@@ -6,6 +6,9 @@ import * as betsRepository from "../repositories/bets.repository.js";
 async function checkBetData(req: Request, res: Response, next: NextFunction) {
   const { betId } = req.params;
   const user = res.locals.user as UserEntity;
+  if (isNaN(Number(betId))) {
+    return res.sendStatus(422);
+  }
   try {
     const bet: BetEntity = (await betsRepository.getBet(Number(betId))).rows[0];
     if (!bet) {

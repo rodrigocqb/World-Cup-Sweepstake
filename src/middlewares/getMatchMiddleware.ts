@@ -4,6 +4,9 @@ import * as matchesRepository from "../repositories/matches.repository.js";
 
 async function getMatchData(req: Request, res: Response, next: NextFunction) {
   const { matchId } = req.params;
+  if (isNaN(Number(matchId))) {
+    return res.sendStatus(422);
+  }
   try {
     const match: MatchEntity = (
       await matchesRepository.getMatchById(Number(matchId))
